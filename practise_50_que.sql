@@ -279,22 +279,70 @@ select * from Worker where worker_id = (select min(worker_id) from Worker);
 
 -- Q-45. Write an SQL query to print the name of employees having the highest salary in each department.
 
-
+ select w.department,w.first_name,w.salary from (select max(salary) as maxsal, department from Worker group by department)  temp
+ inner join Worker w on temp.department = w.department and  temp.maxsal = w.salary; 
+ 
 
 -- Q-46. Write an SQL query to fetch three max salaries from a table using co-related subquery
+
+SELECT DISTINCT
+    salary
+FROM
+    Worker w1
+WHERE
+    3 >= (SELECT 
+            COUNT(DISTINCT salary)
+        FROM
+            Worker w2
+        WHERE
+            w1.salary <= w2.salary)
+ORDER BY salary DESC;
 
 
 -- Q-47. Write an SQL query to fetch three min salaries from a table using co-related subquery
 
+SELECT DISTINCT
+    salary
+FROM
+    Worker w1
+WHERE
+    3 >= (SELECT 
+            COUNT(DISTINCT salary)
+        FROM
+            Worker w2
+        WHERE
+            w1.salary >= w2.salary)
+ORDER BY salary ;
+
+select salary from Worker order by salary limit 3;
+
 
 -- Q-48. Write an SQL query to fetch nth max salaries from a table.
-
+ 
+ SELECT DISTINCT
+    salary
+FROM
+    Worker w1
+WHERE
+    n >= (SELECT 
+            COUNT(DISTINCT salary)
+        FROM
+            Worker w2
+        WHERE
+            w1.salary <= w2.salary)
+ORDER BY salary ;
+  
 
 -- Q-49. Write an SQL query to fetch departments along with the total salaries paid for each of them.
 
+select department , sum(salary) as salary from Worker group by department order by salary desc;
+
 
 -- Q-50. Write an SQL query to fetch the names of workers who earn the highest salary.
-
+       
+       select first_name, salary  from Worker order by salary desc limit 1;
+       
+       select first_name, salary  from Worker where salary = (select max(salary) from Worker);
 
 
  
